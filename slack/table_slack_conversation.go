@@ -112,7 +112,8 @@ func getConversation(ctx context.Context, d *plugin.QueryData, h *plugin.Hydrate
 		plugin.Logger(ctx).Error("slack_conversation.getConversation", "connection_error", err)
 		return nil, err
 	}
-	convo, err := api.GetConversationInfo(id, false)
+	opts := &slack.GetConversationInfoInput{ChannelID: id, IncludeLocale: false, IncludeNumMembers: true}
+	convo, err := api.GetConversationInfo(opts)
 	if err != nil {
 		if err.Error() == "conversation_not_found" || err.Error() == "channel_not_found" {
 			plugin.Logger(ctx).Warn("slack_user.getConversation", "not_found_error", err, "quals", quals)
