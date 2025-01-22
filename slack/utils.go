@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"math"
+	"net/url"
 	"os"
 	"strconv"
 	"time"
@@ -59,4 +60,26 @@ func jsonTimeToTime(ctx context.Context, d *transform.TransformData) (interface{
 		return nil, nil
 	}
 	return jt.Time(), nil
+}
+
+func permalinkToStringFloat(ctx context.Context, d *transform.TransformData) (interface{}, error) {
+	permalink := d.Value.(string)
+	parsedPermalink, err := url.Parse(permalink)
+	if err != nil {
+		return nil, err
+	}
+
+	threadTs := parsedPermalink.Query().Get("thread_ts")
+	if threadTs == "" {
+		return nil, nil
+	}
+	timeFloat, err := strconv.ParseFloat(threadTs, 64)
+	if err != nil {
+		return nil, err
+	}
+	if timeFloat == 0 {
+		return nil, nil
+	}
+
+	return threadTs, nil
 }

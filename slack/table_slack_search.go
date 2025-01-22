@@ -29,6 +29,8 @@ func tableSlackSearch() *plugin.Table {
 			// Other columns
 			{Name: "blocks", Type: proto.ColumnType_JSON, Description: "Block sections in the matching artifact."},
 			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Timestamp").Transform(stringFloatToTime), Description: "Timestamp of the matching artifact."},
+			{Name: "ts", Type: proto.ColumnType_STRING, Transform: transform.FromField("Timestamp"), Description: "Timestamp ts (unmodified) of the matching artifact."},
+			{Name: "thread_ts", Type: proto.ColumnType_STRING, Transform: transform.FromField("Permalink").Transform(permalinkToStringFloat), Description: "Timestamp thread_ts (unmodified) of threaded artifact."},
 			{Name: "user_id", Type: proto.ColumnType_STRING, Transform: transform.FromField("User"), Description: "ID of the user responsible for the matching text."},
 			{Name: "attachments", Type: proto.ColumnType_JSON, Description: "Attachments matching the query."},
 		}),
